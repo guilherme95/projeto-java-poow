@@ -1,0 +1,53 @@
+CREATE TABLE loja(
+	id_loja serial not null,
+	nome_loja varchar(50) unique,
+	PRIMARY KEY(id_loja)
+);
+
+CREATE TABLE produto(
+	id_produto serial not null,
+	nome_produto varchar(50),
+	id_loja int,
+	PRIMARY KEY(id_produto),
+	FOREIGN KEY(id_loja) REFERENCES loja(id_loja)
+);
+
+CREATE TABLE cliente(
+	id_cliente serial not null,
+	nome_cliente varchar(100),
+	rg_cliente varchar(50),
+	cpf_cliente varchar(50),
+	PRIMARY KEY(id_cliente)
+);
+
+CREATE TABLE venda(
+	id_venda serial not null,
+	data_venda date,
+	valor_venda numeric(10,2),
+	quantidade double precision,
+	forma_pagamento varchar(50),
+	id_produto int,
+	id_cliente int,
+	PRIMARY KEY(id_venda),
+	FOREIGN KEY(id_produto) REFERENCES produto(id_produto),
+	FOREIGN KEY(id_cliente) REFERENCES cliente(id_cliente)
+);
+
+CREATE TABLE entregador(
+	id_entregador serial not null,
+	nome_entregador varchar(100),
+	rg_entregador varchar(50),
+	cpf_entregador varchar(50),
+	PRIMARY KEY(id_entregador)
+);
+
+CREATE TABLE entrega(
+	id_entrega serial not null,
+	endereco_entrega varchar(100),
+	id_entregador int,
+	id_venda int,
+	PRIMARY KEY(id_entrega),
+	FOREIGN KEY(id_entregador) REFERENCES entregador(id_entregador),
+	FOREIGN KEY(id_venda) REFERENCES venda(id_venda)
+);
+
