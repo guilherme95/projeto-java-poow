@@ -1,6 +1,8 @@
 package br.ufsm.csi.dao;
 
+import br.ufsm.csi.connection.ConectaDB;
 import br.ufsm.csi.model.Cliente;
+import br.ufsm.csi.model.Usuario;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,25 +15,36 @@ public class ClienteDAO {
     private PreparedStatement preparedStatement;
     private String status;
 
-    //get all
+    //get all clients DONE
     public ArrayList<Cliente> getClientes(){
 
         ArrayList<Cliente> clientes = new ArrayList<Cliente>();
 
         try(Connection connection = new ConectaDB().getConexao() ){
 
-            this.sql = "SELECT * FROM cliente";
+            this.sql = "SELECT " +
+                    "u.id_usuario, c.id_cliente, u.nome_usuario, u.rg_usuario, u.cpf_usuario, u.tel_usuario, u.email_usuario, u.senha_usuario " +
+                    "FROM " +
+                    "usuario u, cliente c " +
+                    "WHERE " +
+                    "u.id_usuario = c.id_usuario;";
             this.statement = connection.createStatement();
             this.resultSet = this.statement.executeQuery(sql);
 
             while(this.resultSet.next()){
-                Cliente cliente = new Cliente();
-                cliente.setId_cliente(this.resultSet.getInt("id_cliente"));
-                cliente.setNome_cliente(this.resultSet.getString("nome_cliente"));
-                cliente.setCpf_cliente(this.resultSet.getString("cpf_cliente"));
-                cliente.setRg_cliente(this.resultSet.getString("rg_cliente"));
+                Usuario usuario = new Usuario();
+                usuario.setId_usuario(this.resultSet.getInt("id_usuario"));
+                usuario.setNome_usuario(this.resultSet.getString("nome_usuario"));
+                usuario.setRg_usuario(this.resultSet.getString("rg_usuario"));
+                usuario.setCpf_usuario(this.resultSet.getString("cpf_usuario"));
+                usuario.setTel_usuario(this.resultSet.getString("tel_usuario"));
+                usuario.setEmail_usuario(this.resultSet.getString("email_usuario"));
+                usuario.setSenha_usuario(this.resultSet.getString("senha_usuario"));
 
+                Cliente cliente = new Cliente(usuario);
+                cliente.setId_cliente(this.resultSet.getInt("id_cliente"));
                 clientes.add(cliente);
+                System.out.println(cliente.getUsuario().getNome_usuario());
             }
 
         }catch (SQLException e){
@@ -41,56 +54,37 @@ public class ClienteDAO {
         return clientes;
     }
 
-    //get one
-    public Cliente getCliente(Cliente cliente){
-        try(Connection connection = new ConectaDB().getConexao() ){
-
-            this.sql = "SELECT * FROM cliente WHERE id_cliente = ? OR nome_cliente LIKE ?";
+    //retrieve client DONE
+    public Cliente getCliente(int id){
+        Cliente cliente = null;
+        try(Connection connection = new ConectaDB().getConexao()){
+            this.sql = "SELECT * FROM cliente WHERE id_cliente = ?;";
             this.preparedStatement = connection.prepareStatement(this.sql);
-            this.preparedStatement.setInt(1, cliente.getId_cliente());
-            this.preparedStatement.setString(2, '%'+cliente.getNome_cliente()+'%');
-
-            this.preparedStatement.execute();
-            this.resultSet = this.preparedStatement.getResultSet();
-            this.resultSet.next();
+            this.preparedStatement.setInt(1, id);
+            this.resultSet = this.preparedStatement.executeQuery();
 
             while(this.resultSet.next()){
-                cliente.setId_cliente(this.resultSet.getInt("id_loja"));
-                cliente.setNome_cliente(this.resultSet.getString("nome_cliente"));
-                cliente.setRg_cliente(this.resultSet.getString("rg_cliente"));
-                cliente.setCpf_cliente(this.resultSet.getString("cpf_cliente"));
+                int id_usuario = this.resultSet.getInt("id_usuario");
+                cliente = new Cliente(new UsuarioDAO().getUsuario(id_usuario));
+                cliente.setId_cliente(id);
             }
 
-        }catch (SQLException e){
-            this.status = "Error";
+        }catch(SQLException e){
             e.printStackTrace();
         }
         return cliente;
     }
 
-    //update
-    public String update(Cliente cliente){
+    //update client DONE
+    public String atualizar(Cliente cliente){
         try(Connection connection = new ConectaDB().getConexao() ){
 
             connection.setAutoCommit(false);
 
-            this.sql = "UPDATE cliente SET nome_cliente = ?, rg_cliente = ?, cpf_cliente = ? WHERE id_cliente = ?";
-            this.preparedStatement = connection.prepareStatement(this.sql, PreparedStatement.RETURN_GENERATED_KEYS);
-            this.preparedStatement.setString(1, cliente.getNome_cliente());
-            this.preparedStatement.setString(2, cliente.getRg_cliente());
-            this.preparedStatement.setString(3, cliente.getCpf_cliente());
-            this.preparedStatement.setInt(4, cliente.getId_cliente());
+            String retorno = new UsuarioDAO().atualizar(cliente.getUsuario(), connection);
 
-            this.preparedStatement.execute();
-            this.resultSet = this.preparedStatement.getGeneratedKeys();
-            this.resultSet.next();
-
-            if(this.resultSet.getInt(1) > 0){
-                cliente.setId_cliente(this.resultSet.getInt(1));
+            if(retorno.equals("OK")){
                 this.status = "OK";
-            }
-
-            if(this.status.equals("OK")){
                 connection.commit();
             }
 
@@ -98,69 +92,69 @@ public class ClienteDAO {
             this.status = "Error";
             e.printStackTrace();
         }
-        return null;
+        return this.status;
     }
 
-    //create
-    public String create(Cliente cliente){
+    //create client DONE
+    public String cadastrar(Cliente cliente){
         try(Connection connection = new ConectaDB().getConexao() ){
 
             connection.setAutoCommit(false);
 
-            this.sql = "INSERT INTO cliente (nome_cliente, rg_cliente, cpf_cliente) VALUES nome_cliente = ?, rg_cliente = ?, cpf_cliente = ?";
-            this.preparedStatement = connection.prepareStatement(this.sql, PreparedStatement.RETURN_GENERATED_KEYS);
-            this.preparedStatement.setString(1, cliente.getNome_cliente());
-            this.preparedStatement.setString(2, cliente.getRg_cliente());
-            this.preparedStatement.setString(3, cliente.getCpf_cliente());
+            Usuario usuario = new UsuarioDAO().cadastrar(cliente.getUsuario(), connection);
 
-            this.preparedStatement.execute();
-            this.resultSet = this.preparedStatement.getGeneratedKeys();
-            this.resultSet.next();
+            if(usuario != null){
+                System.out.println("dentro do if usuario");
+                System.out.println(usuario.getId_usuario());
+                this.sql = "INSERT INTO cliente(id_usuario) VALUES (?);";
+                this.preparedStatement = connection.prepareStatement(this.sql, PreparedStatement.RETURN_GENERATED_KEYS);
+                this.preparedStatement.setInt(1, usuario.getId_usuario());
+                this.preparedStatement.execute();
 
-            if(this.resultSet.getInt(1) > 0){
-                cliente.setId_cliente(this.resultSet.getInt(1));
-                this.status = "OK";
-            }
+                this.resultSet = this.preparedStatement.getGeneratedKeys();
+                this.resultSet.next();
 
-            if(this.status.equals("OK")){
-                connection.commit();
+                if(this.resultSet.getInt(1) > 0){
+                    this.status = "OK";
+                }
+
+                if(this.status.equals("OK")){
+                    connection.commit();
+                }
             }
 
         }catch (SQLException e){
             this.status = "Error";
             e.printStackTrace();
         }
-        return null;
+        return this.status;
     }
 
-    //delete
-    public String delete(Cliente cliente){
+    //delete client DONE
+    public String deletar(Cliente cliente){
+
         try(Connection connection = new ConectaDB().getConexao() ){
 
             connection.setAutoCommit(false);
 
-            this.sql = "DELETE FROM cliente WHERE id_cliente = ?";
+            this.sql = "DELETE FROM cliente WHERE id_cliente = ?;";
             this.preparedStatement = connection.prepareStatement(this.sql, PreparedStatement.RETURN_GENERATED_KEYS);
             this.preparedStatement.setInt(1, cliente.getId_cliente());
+            this.preparedStatement.executeUpdate();
 
-            this.preparedStatement.execute();
-            this.resultSet = this.preparedStatement.getGeneratedKeys();
-            this.resultSet.next();
-
-            if(this.resultSet.getInt(1) > 0){
-                cliente.setId_cliente(this.resultSet.getInt(1));
-                this.status = "OK";
-            }
-
-            if(this.status.equals("OK")){
-                connection.commit();
+            if(this.preparedStatement.getUpdateCount()>0){
+                String retorno = new UsuarioDAO().deletar(cliente.getUsuario(), connection);
+                if(retorno.equals("OK")){
+                    this.status = "OK";
+                    connection.commit();
+                }
             }
 
         }catch (SQLException e){
             this.status = "Error";
             e.printStackTrace();
         }
-        return null;
+        return this.status;
     }
 
 }

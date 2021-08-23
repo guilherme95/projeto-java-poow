@@ -3,11 +3,17 @@ package br.ufsm.csi.model;
 public class Cliente {
 
     private int id_cliente;
-    private String nome_cliente;
-    private String rg_cliente;
-    private String cpf_cliente;
+    private Usuario usuario;
 
-    public Cliente() {
+    public Cliente (){}
+
+    public Cliente(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Cliente(int id_cliente, Usuario usuario) {
+        this.id_cliente = id_cliente;
+        this.usuario = usuario;
     }
 
     public int getId_cliente() {
@@ -18,27 +24,11 @@ public class Cliente {
         this.id_cliente = id_cliente;
     }
 
-    public String getNome_cliente() {
-        return nome_cliente;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setNome_cliente(String nome_cliente) {
-        this.nome_cliente = nome_cliente;
-    }
-
-    public String getRg_cliente() {
-        return rg_cliente;
-    }
-
-    public void setRg_cliente(String rg_cliente) {
-        this.rg_cliente = rg_cliente;
-    }
-
-    public String getCpf_cliente() {
-        return cpf_cliente;
-    }
-
-    public void setCpf_cliente(String cpf_cliente) {
-        this.cpf_cliente = cpf_cliente;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }

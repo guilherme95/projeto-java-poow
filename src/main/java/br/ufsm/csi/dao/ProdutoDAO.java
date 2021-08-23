@@ -1,5 +1,6 @@
 package br.ufsm.csi.dao;
 
+import br.ufsm.csi.connection.ConectaDB;
 import br.ufsm.csi.model.Loja;
 import br.ufsm.csi.model.Produto;
 

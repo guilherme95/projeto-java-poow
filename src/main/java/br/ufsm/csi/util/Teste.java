@@ -1,6 +1,6 @@
 package br.ufsm.csi.util;
 
-import br.ufsm.csi.dao.ConectaDB;
+import br.ufsm.csi.connection.ConectaDB;
 
 public class Teste {
 

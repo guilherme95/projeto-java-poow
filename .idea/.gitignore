@@ -6,3 +6,12 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+# Este é um comentário
+# Ignorar alvo no nível superior
+/target/
+# Ignorar targets dos projetos filhos também
+/*target//
+# E os netos ...
+/*/*/target/
+# Ou você pode fazer:
+target/

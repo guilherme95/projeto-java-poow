@@ -1,4 +1,4 @@
-package br.ufsm.csi.dao;
+package br.ufsm.csi.connection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

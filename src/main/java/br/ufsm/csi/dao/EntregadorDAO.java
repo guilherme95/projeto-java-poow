@@ -1,5 +1,6 @@
 package br.ufsm.csi.dao;
 
+import br.ufsm.csi.connection.ConectaDB;
 import br.ufsm.csi.model.Entregador;
 
 import java.sql.*;
