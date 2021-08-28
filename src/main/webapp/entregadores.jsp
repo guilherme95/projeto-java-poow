@@ -34,6 +34,9 @@
           <li class="nav-item">
             <a class="nav-link active" href="http://localhost:8080/Projeto/entregadores">Entregadores</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="http://localhost:8080/Projeto/lojas">Lojas</a>
+          </li>
         </ul>
       </div>
     </div>

@@ -7,6 +7,15 @@ public class Loja {
     public Loja() {
     }
 
+    public Loja(String nome_loja) {
+        this.nome_loja = nome_loja;
+    }
+
+    public Loja(int id_loja, String nome_loja) {
+        this.id_loja = id_loja;
+        this.nome_loja = nome_loja;
+    }
+
     public int getId_loja() {
         return id_loja;
     }

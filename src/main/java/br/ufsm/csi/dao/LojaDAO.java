@@ -1,7 +1,9 @@
 package br.ufsm.csi.dao;
 
 import br.ufsm.csi.connection.ConectaDB;
+import br.ufsm.csi.model.Entregador;
 import br.ufsm.csi.model.Loja;
+import br.ufsm.csi.model.Usuario;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,14 +16,14 @@ public class LojaDAO {
     private PreparedStatement preparedStatement;
     private String status;
 
-    //get all
+    //get all stores DONE
     public ArrayList<Loja> getLojas(){
 
         ArrayList<Loja> lojas = new ArrayList<Loja>();
 
         try(Connection connection = new ConectaDB().getConexao() ){
 
-            this.sql = "SELECT * FROM loja";
+            this.sql = "SELECT * FROM loja;";
             this.statement = connection.createStatement();
             this.resultSet = this.statement.executeQuery(sql);
 
@@ -40,18 +42,17 @@ public class LojaDAO {
         return lojas;
     }
 
-    //get one
-    public Loja getLoja(Loja loja){
-        try(Connection connection = new ConectaDB().getConexao() ){
+    //retrieve store DONE
+    public Loja getLoja(int id){
+        Loja loja = new Loja();
 
-            this.sql = "SELECT * FROM loja WHERE id_loja = ? OR nome_loja LIKE ?";
+        try(Connection connection = new ConectaDB().getConexao()){
+
+            this.sql = "select * from loja where id_loja = ?";
             this.preparedStatement = connection.prepareStatement(this.sql);
-            this.preparedStatement.setInt(1, loja.getId_loja());
-            this.preparedStatement.setString(2, '%'+loja.getNome_loja()+'%');
+            this.preparedStatement.setInt(1, id);
 
-            this.preparedStatement.execute();
-            this.resultSet = this.preparedStatement.getResultSet();
-            this.resultSet.next();
+            this.resultSet = this.preparedStatement.executeQuery();
 
             while(this.resultSet.next()){
                 loja.setId_loja(this.resultSet.getInt("id_loja"));
@@ -59,33 +60,26 @@ public class LojaDAO {
             }
 
         }catch (SQLException e){
-            this.status = "Error";
             e.printStackTrace();
         }
+
         return loja;
     }
 
-    //update
-    public String update(Loja loja){
+    //update store DONE
+    public String atualizar(Loja loja){
         try(Connection connection = new ConectaDB().getConexao() ){
 
             connection.setAutoCommit(false);
 
-            this.sql = "UPDATE loja SET nome_loja = ? WHERE id_loja = ?";
-            this.preparedStatement = connection.prepareStatement(this.sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            this.sql = "UPDATE loja SET nome_loja = ? WHERE id_loja = ?;";
+            this.preparedStatement = connection.prepareStatement(this.sql);
             this.preparedStatement.setString(1, loja.getNome_loja());
             this.preparedStatement.setInt(2, loja.getId_loja());
+            this.preparedStatement.executeUpdate();
 
-            this.preparedStatement.execute();
-            this.resultSet = this.preparedStatement.getGeneratedKeys();
-            this.resultSet.next();
-
-            if(this.resultSet.getInt(1) > 0){
-                loja.setId_loja(this.resultSet.getInt(1));
+            if(this.preparedStatement.getUpdateCount() > 0){
                 this.status = "OK";
-            }
-
-            if(this.status.equals("OK")){
                 connection.commit();
             }
 
@@ -93,29 +87,26 @@ public class LojaDAO {
             this.status = "Error";
             e.printStackTrace();
         }
-        return null;
+        return this.status;
     }
 
-    //create
-    public String create(Loja loja){
+    //create store DONE
+    public String cadastrar(Loja loja){
         try(Connection connection = new ConectaDB().getConexao() ){
 
             connection.setAutoCommit(false);
 
-            this.sql = "INSERT INTO loja (nome_loja) VALUES nome_loja = ?";
+
+            this.sql = "INSERT INTO loja(nome_loja) VALUES (?);";
             this.preparedStatement = connection.prepareStatement(this.sql, PreparedStatement.RETURN_GENERATED_KEYS);
             this.preparedStatement.setString(1, loja.getNome_loja());
-
             this.preparedStatement.execute();
+
             this.resultSet = this.preparedStatement.getGeneratedKeys();
             this.resultSet.next();
 
             if(this.resultSet.getInt(1) > 0){
-                loja.setId_loja(this.resultSet.getInt(1));
                 this.status = "OK";
-            }
-
-            if(this.status.equals("OK")){
                 connection.commit();
             }
 
@@ -123,29 +114,23 @@ public class LojaDAO {
             this.status = "Error";
             e.printStackTrace();
         }
-        return null;
+        return this.status;
     }
 
-    //delete
-    public String delete(Loja loja){
+    //delete store DONE
+    public String deletar(Loja loja){
+
         try(Connection connection = new ConectaDB().getConexao() ){
 
             connection.setAutoCommit(false);
 
-            this.sql = "DELETE FROM loja WHERE id_loja = ?";
+            this.sql = "DELETE FROM loja WHERE id_loja = ?;";
             this.preparedStatement = connection.prepareStatement(this.sql, PreparedStatement.RETURN_GENERATED_KEYS);
             this.preparedStatement.setInt(1, loja.getId_loja());
+            this.preparedStatement.executeUpdate();
 
-            this.preparedStatement.execute();
-            this.resultSet = this.preparedStatement.getGeneratedKeys();
-            this.resultSet.next();
-
-            if(this.resultSet.getInt(1) > 0){
-                loja.setId_loja(this.resultSet.getInt(1));
+            if(this.preparedStatement.getUpdateCount()>0){
                 this.status = "OK";
-            }
-
-            if(this.status.equals("OK")){
                 connection.commit();
             }
 
@@ -153,6 +138,6 @@ public class LojaDAO {
             this.status = "Error";
             e.printStackTrace();
         }
-        return null;
+        return this.status;
     }
 }
