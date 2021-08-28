@@ -1,0 +1,36 @@
+body {
+    padding: 10px;
+}
+
+h1 {
+    margin-left: 1%;
+}
+
+form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+form > div {
+    float: left;
+    margin-right: 10px;
+    width: 32%;
+}
+
+#divBtnSubmitClient {
+    float: left;
+    width: 97%;
+}
+
+#btnSubmitClient {
+    float: right;
+    width: 12%;
+}
+
+section {
+    float: left;
+    width: 100%;
+}

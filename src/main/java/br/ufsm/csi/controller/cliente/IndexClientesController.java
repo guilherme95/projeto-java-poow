@@ -1,4 +1,4 @@
-package br.ufsm.csi.controller;
+package br.ufsm.csi.controller.cliente;
 
 import br.ufsm.csi.dao.ClienteDAO;
 
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/clientes")
-public class IndexController extends HttpServlet {
+public class IndexClientesController extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

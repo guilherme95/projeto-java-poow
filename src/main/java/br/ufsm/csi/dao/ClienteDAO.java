@@ -65,8 +65,8 @@ public class ClienteDAO {
 
             while(this.resultSet.next()){
                 int id_usuario = this.resultSet.getInt("id_usuario");
-                cliente = new Cliente(new UsuarioDAO().getUsuario(id_usuario));
-                cliente.setId_cliente(id);
+                cliente = new Cliente(id, new UsuarioDAO().getUsuario(id_usuario));
+//                cliente.setId_cliente(id);
             }
 
         }catch(SQLException e){

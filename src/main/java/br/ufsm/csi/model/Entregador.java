@@ -3,11 +3,21 @@ package br.ufsm.csi.model;
 public class Entregador {
 
     private int id_entregador;
-    private String nome_entregador;
-    private String rg_entregador;
-    private String cpf_entregador;
+    private String cnh_entregador;
+    private Usuario usuario;
 
     public Entregador() {
+    }
+
+    public Entregador(String cnh_entregador, Usuario usuario) {
+        this.cnh_entregador = cnh_entregador;
+        this.usuario = usuario;
+    }
+
+    public Entregador(int id_entregador, String cnh_entregador, Usuario usuario) {
+        this.id_entregador = id_entregador;
+        this.cnh_entregador = cnh_entregador;
+        this.usuario = usuario;
     }
 
     public int getId_entregador() {
@@ -18,27 +28,19 @@ public class Entregador {
         this.id_entregador = id_entregador;
     }
 
-    public String getNome_entregador() {
-        return nome_entregador;
+    public String getCnh_entregador() {
+        return cnh_entregador;
     }
 
-    public void setNome_entregador(String nome_entregador) {
-        this.nome_entregador = nome_entregador;
+    public void setCnh_entregador(String cnh_entregador) {
+        this.cnh_entregador = cnh_entregador;
     }
 
-    public String getRg_entregador() {
-        return rg_entregador;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setRg_entregador(String rg_entregador) {
-        this.rg_entregador = rg_entregador;
-    }
-
-    public String getCpf_entregador() {
-        return cpf_entregador;
-    }
-
-    public void setCpf_entregador(String cpf_entregador) {
-        this.cpf_entregador = cpf_entregador;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }

@@ -1,7 +1,7 @@
-package br.ufsm.csi.controller;
+package br.ufsm.csi.controller.entregador;
 
-import br.ufsm.csi.dao.ClienteDAO;
-import br.ufsm.csi.model.Cliente;
+import br.ufsm.csi.dao.EntregadorDAO;
+import br.ufsm.csi.model.Entregador;
 import br.ufsm.csi.model.Usuario;
 
 import javax.servlet.RequestDispatcher;
@@ -12,59 +12,57 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("cliente-controller")
-public class ClienteController extends HttpServlet {
-
+@WebServlet("entregador-controller")
+public class EntregadorController extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        ClienteDAO clienteDAO = new ClienteDAO();
+        EntregadorDAO entregadorDAO = new EntregadorDAO();
         String opcao = "";
+        String retorno = "";
 
         if(req.getParameter("opcao")!=null){
             opcao = req.getParameter("opcao");
         }
 
-        System.out.println("Em cima do controller");
-
-        String retorno = "";
-
         if(opcao.equals("excluir")){
-            String id = req.getParameter("id");
-            System.out.println("ID do cliente a ser excluído: "+id);
+            int id = Integer.parseInt(req.getParameter("id"));
+            System.out.println("ID do entregador a ser excluído: "+id);
 
-            Cliente cliente = new ClienteDAO().getCliente(Integer.parseInt(id));
-            System.out.println("ID_CLIENTE: "+cliente.getId_cliente());
-            retorno = clienteDAO.deletar(cliente);
+            Entregador entregador = new EntregadorDAO().getEntregador(id);
+            retorno = entregadorDAO.deletar(entregador);
             System.out.println("excluído!!!");
 
         }else if(opcao.equals("editar")) {
             int id = Integer.parseInt(req.getParameter("id"));
-            Cliente cliente = new ClienteDAO().getCliente(id);
-            req.setAttribute("cliente", cliente);
+            Entregador entregador = new EntregadorDAO().getEntregador(id);
+            req.setAttribute("entregador", entregador);
         }else{
             String nome = req.getParameter("nome");
             String rg = req.getParameter("rg");
             String cpf = req.getParameter("cpf");
             String telefone = req.getParameter("telefone");
+            String cnh = req.getParameter("cnh");
             String email = req.getParameter("email");
             String senha = req.getParameter("senha");
 
             Usuario usuario = new Usuario(nome, rg, cpf, telefone, email, senha);
-            int id = Integer.parseInt(req.getParameter("idcliente"));
+            int id = Integer.parseInt(req.getParameter("identregador"));
+
+            System.out.println(cnh);
 
             if(id>0){
                 usuario.setId_usuario(Integer.parseInt(req.getParameter("idusuario")));
-                Cliente cliente = new Cliente(id, usuario);
-                retorno = clienteDAO.atualizar(cliente);
+                Entregador entregador = new Entregador(id, cnh, usuario);
+                retorno = entregadorDAO.atualizar(entregador);
             }else{
-                Cliente cliente = new Cliente(usuario);
-                retorno = clienteDAO.cadastrar(cliente);
+                Entregador entregador = new Entregador(cnh, usuario);
+                retorno = entregadorDAO.cadastrar(entregador);
             }
         }
 
         req.setAttribute("retorno", retorno);
-        RequestDispatcher rd = req.getRequestDispatcher("/clientes");
+        System.out.println("requestdispacher para entregadores");
+        RequestDispatcher rd = req.getRequestDispatcher("/entregadores");
         rd.forward(req, resp);
     }
 }

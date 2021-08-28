@@ -12,6 +12,11 @@ public class Usuario {
 
     public Usuario() {}
 
+    public Usuario(String email_usuario, String senha_usuario) {
+        this.email_usuario = email_usuario;
+        this.senha_usuario = senha_usuario;
+    }
+
     public Usuario(String nome_usuario, String rg_usuario, String cpf_usuario, String tel_usuario, String email_usuario, String senha_usuario) {
         this.nome_usuario = nome_usuario;
         this.rg_usuario = rg_usuario;
