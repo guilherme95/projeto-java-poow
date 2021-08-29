@@ -36,6 +36,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="http://localhost:8080/Projeto/lojas">Lojas</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://localhost:8080/Projeto/produtos">Produtos</a>
+                </li>
             </ul>
         </div>
     </div>

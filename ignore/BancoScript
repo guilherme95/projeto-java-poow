@@ -7,7 +7,7 @@ CREATE TABLE loja(
 CREATE TABLE produto(
 	id_produto serial not null,
 	nome_produto varchar(50),
-	valor_produto numeric(10,2),
+	valor_produto varchar(50),
 	id_loja int,
 	PRIMARY KEY(id_produto),
 	FOREIGN KEY(id_loja) REFERENCES loja(id_loja)
