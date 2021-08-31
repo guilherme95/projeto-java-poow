@@ -15,10 +15,8 @@ public class IndexClientesController extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         req.setAttribute("clientes", new ClienteDAO().getClientes());
         RequestDispatcher rd = req.getRequestDispatcher("/clientes.jsp");
         rd.forward(req, resp);
-        System.out.println("...index");
     }
 }

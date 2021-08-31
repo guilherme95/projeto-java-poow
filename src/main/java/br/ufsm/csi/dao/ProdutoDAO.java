@@ -1,11 +1,8 @@
 package br.ufsm.csi.dao;
 
 import br.ufsm.csi.connection.ConectaDB;
-import br.ufsm.csi.model.Entregador;
 import br.ufsm.csi.model.Loja;
 import br.ufsm.csi.model.Produto;
-import br.ufsm.csi.model.Usuario;
-
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -49,13 +46,14 @@ public class ProdutoDAO {
 
     //retrieve product DONE
     public Produto getProduto(int id){
+
         Produto produto = new Produto();
+
         try(Connection connection = new ConectaDB().getConexao()){
 
             this.sql = "SELECT * FROM produto WHERE id_produto = ?;";
             this.preparedStatement = connection.prepareStatement(this.sql);
             this.preparedStatement.setInt(1, id);
-
             this.resultSet = this.preparedStatement.executeQuery();
 
             while(this.resultSet.next()){
@@ -75,16 +73,10 @@ public class ProdutoDAO {
 
     //update product DONE
     public String atualizar(Produto produto){
+
         try(Connection connection = new ConectaDB().getConexao() ){
 
             connection.setAutoCommit(false);
-
-//            String retorno = new UsuarioDAO().atualizar(entregador.getUsuario(), connection);
-
-            System.out.println("id do produto dao"+produto.getId_produto());
-            System.out.println(produto.getNome_produto());
-            System.out.println(produto.getValor_produto());
-            System.out.println(produto.getLoja().getId_loja());
 
             this.sql = "UPDATE produto SET nome_produto = ?, valor_produto = ?, id_loja = ? WHERE id_produto = ?;";
             this.preparedStatement = connection.prepareStatement(this.sql);
@@ -109,6 +101,7 @@ public class ProdutoDAO {
 
     //create product DONE
     public String cadastrar(Produto produto){
+
         try(Connection connection = new ConectaDB().getConexao() ){
 
             connection.setAutoCommit(false);
@@ -119,7 +112,6 @@ public class ProdutoDAO {
             this.preparedStatement.setString(2, produto.getValor_produto());
             this.preparedStatement.setInt(3, produto.getLoja().getId_loja());
             this.preparedStatement.execute();
-
             this.resultSet = this.preparedStatement.getGeneratedKeys();
             this.resultSet.next();
 
@@ -148,7 +140,7 @@ public class ProdutoDAO {
             this.preparedStatement.executeUpdate();
 
             if(this.preparedStatement.getUpdateCount()>0){
-                this.status = "OK";
+                this.status = "Excluído";
                 connection.commit();
             }
 

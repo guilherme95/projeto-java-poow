@@ -2,7 +2,6 @@ package br.ufsm.csi.dao;
 
 import br.ufsm.csi.connection.ConectaDB;
 import br.ufsm.csi.model.Usuario;
-
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -54,7 +53,6 @@ public class UsuarioDAO {
             this.sql = "select * from usuario where id_usuario = ?";
             this.preparedStatement = connection.prepareStatement(this.sql);
             this.preparedStatement.setInt(1, id);
-
             this.resultSet = this.preparedStatement.executeQuery();
 
             while(this.resultSet.next()){
@@ -117,7 +115,7 @@ public class UsuarioDAO {
         if(this.preparedStatement.getUpdateCount() > 0){
             this.status = "OK";
         }else{
-            this.status = "Problemas";
+            this.status = "Error";
         }
         return this.status;
     }
@@ -131,9 +129,9 @@ public class UsuarioDAO {
         this.preparedStatement.executeUpdate();
 
         if(this.preparedStatement.getUpdateCount() > 0){
-            this.status = "OK";
+            this.status = "Excluído";
         }else{
-            this.status = "Problemas";
+            this.status = "Error";
         }
         return this.status;
     }

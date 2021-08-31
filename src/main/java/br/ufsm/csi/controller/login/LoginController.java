@@ -27,17 +27,16 @@ public class LoginController extends HttpServlet {
         }
 
         if(opcao.equals("login")){
-
             String email_usuario = req.getParameter("email");
             String senha_usuario = req.getParameter("senha");
             Usuario usuario = new Usuario(email_usuario, senha_usuario);
-
             retorno = loginDAO.autorizar(usuario);
 
             if(retorno.equals("SUCCESS")){
                 req.setAttribute("retorno", retorno);
                 RequestDispatcher rd = req.getRequestDispatcher("/clientes");
                 rd.forward(req, resp);
+
             }else{
                 req.setAttribute("retorno", retorno);
                 RequestDispatcher rd = req.getRequestDispatcher("/");

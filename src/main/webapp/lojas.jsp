@@ -13,7 +13,9 @@
 <head>
     <title>Lojas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
-    <link href="resources/css/lojas.css" rel="stylesheet">
+    <style>
+        <%@include file="resources/css/lojas.css"%>
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -28,34 +30,41 @@
                     <a class="nav-link" href="http://localhost:8080/Projeto/">Login</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="http://localhost:8080/Projeto/clientes">Clientes</a>
+                    <a class="nav-link" href="http://localhost:8080/Projeto/clientes">Clientes</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="http://localhost:8080/Projeto/entregadores">Entregadores</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="http://localhost:8080/Projeto/lojas">Lojas</a>
+                    <a class="nav-link active" href="http://localhost:8080/Projeto/lojas">Lojas</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="http://localhost:8080/Projeto/produtos">Produtos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://localhost:8080/Projeto/vendas">Vendas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://localhost:8080/Projeto/entregas">Entregas</a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
-<form action="loja-controller" method="post">
 
-    <c:choose>
-        <c:when test="${loja.id_loja != null}">
-            <h1>Editar loja</h1>
-            <input type="hidden" name="idloja" value="${loja.id_loja}">
-        </c:when>
-        <c:otherwise>
-            <h1>Adicionar loja</h1>
-            <input type="hidden" name="idloja" value="0">
-        </c:otherwise>
-    </c:choose>
-    <div class="mb-3 col-md-3">
+<c:choose>
+    <c:when test="${loja.id_loja != null}">
+        <h1>Editar loja</h1>
+        <input type="hidden" name="idloja" value="${loja.id_loja}">
+    </c:when>
+    <c:otherwise>
+        <h1>Adicionar loja</h1>
+        <input type="hidden" name="idloja" value="0">
+    </c:otherwise>
+</c:choose>
+
+<form action="loja-controller" method="post">
+    <div class="mb-3 col-md-3" id="label-left">
         <label class="form-label" for="nome">Nome</label>
         <input class="form-control" id="nome" name="nome" type="text" value="${loja.nome_loja}"/>
     </div>

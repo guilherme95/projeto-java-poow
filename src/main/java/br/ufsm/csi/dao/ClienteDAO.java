@@ -3,7 +3,6 @@ package br.ufsm.csi.dao;
 import br.ufsm.csi.connection.ConectaDB;
 import br.ufsm.csi.model.Cliente;
 import br.ufsm.csi.model.Usuario;
-
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -44,7 +43,6 @@ public class ClienteDAO {
                 Cliente cliente = new Cliente(usuario);
                 cliente.setId_cliente(this.resultSet.getInt("id_cliente"));
                 clientes.add(cliente);
-                System.out.println(cliente.getUsuario().getNome_usuario());
             }
 
         }catch (SQLException e){
@@ -56,8 +54,11 @@ public class ClienteDAO {
 
     //retrieve client DONE
     public Cliente getCliente(int id){
+
         Cliente cliente = null;
+
         try(Connection connection = new ConectaDB().getConexao()){
+
             this.sql = "SELECT * FROM cliente WHERE id_cliente = ?;";
             this.preparedStatement = connection.prepareStatement(this.sql);
             this.preparedStatement.setInt(1, id);
@@ -66,7 +67,6 @@ public class ClienteDAO {
             while(this.resultSet.next()){
                 int id_usuario = this.resultSet.getInt("id_usuario");
                 cliente = new Cliente(id, new UsuarioDAO().getUsuario(id_usuario));
-//                cliente.setId_cliente(id);
             }
 
         }catch(SQLException e){
@@ -104,13 +104,10 @@ public class ClienteDAO {
             Usuario usuario = new UsuarioDAO().cadastrar(cliente.getUsuario(), connection);
 
             if(usuario != null){
-                System.out.println("dentro do if usuario");
-                System.out.println(usuario.getId_usuario());
                 this.sql = "INSERT INTO cliente(id_usuario) VALUES (?);";
                 this.preparedStatement = connection.prepareStatement(this.sql, PreparedStatement.RETURN_GENERATED_KEYS);
                 this.preparedStatement.setInt(1, usuario.getId_usuario());
                 this.preparedStatement.execute();
-
                 this.resultSet = this.preparedStatement.getGeneratedKeys();
                 this.resultSet.next();
 
@@ -144,8 +141,9 @@ public class ClienteDAO {
 
             if(this.preparedStatement.getUpdateCount()>0){
                 String retorno = new UsuarioDAO().deletar(cliente.getUsuario(), connection);
-                if(retorno.equals("OK")){
-                    this.status = "OK";
+
+                if(retorno.equals("Excluído")){
+                    this.status = "Excluído";
                     connection.commit();
                 }
             }

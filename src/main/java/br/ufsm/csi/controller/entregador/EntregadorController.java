@@ -26,11 +26,8 @@ public class EntregadorController extends HttpServlet {
 
         if(opcao.equals("excluir")){
             int id = Integer.parseInt(req.getParameter("id"));
-            System.out.println("ID do entregador a ser excluído: "+id);
-
             Entregador entregador = new EntregadorDAO().getEntregador(id);
             retorno = entregadorDAO.deletar(entregador);
-            System.out.println("excluído!!!");
 
         }else if(opcao.equals("editar")) {
             int id = Integer.parseInt(req.getParameter("id"));
@@ -44,11 +41,8 @@ public class EntregadorController extends HttpServlet {
             String cnh = req.getParameter("cnh");
             String email = req.getParameter("email");
             String senha = req.getParameter("senha");
-
             Usuario usuario = new Usuario(nome, rg, cpf, telefone, email, senha);
             int id = Integer.parseInt(req.getParameter("identregador"));
-
-            System.out.println(cnh);
 
             if(id>0){
                 usuario.setId_usuario(Integer.parseInt(req.getParameter("idusuario")));
@@ -59,9 +53,7 @@ public class EntregadorController extends HttpServlet {
                 retorno = entregadorDAO.cadastrar(entregador);
             }
         }
-
         req.setAttribute("retorno", retorno);
-        System.out.println("requestdispacher para entregadores");
         RequestDispatcher rd = req.getRequestDispatcher("/entregadores");
         rd.forward(req, resp);
     }

@@ -29,19 +29,16 @@ public class lojaController extends HttpServlet {
 
         if(opcao.equals("excluir")){
             int id = Integer.parseInt(req.getParameter("id"));
-            System.out.println("ID da loja a ser excluída: "+id);
-
             Loja loja = new LojaDAO().getLoja(id);
             retorno = lojaDAO.deletar(loja);
-            System.out.println("excluído!!!");
 
         }else if(opcao.equals("editar")) {
             int id = Integer.parseInt(req.getParameter("id"));
             Loja loja = new LojaDAO().getLoja(id);
             req.setAttribute("loja", loja);
+
         }else{
             String nome = req.getParameter("nome");
-
             int id = Integer.parseInt(req.getParameter("idloja"));
 
             if(id>0){
@@ -52,7 +49,6 @@ public class lojaController extends HttpServlet {
                 retorno = lojaDAO.cadastrar(loja);
             }
         }
-
         req.setAttribute("retorno", retorno);
         RequestDispatcher rd = req.getRequestDispatcher("/lojas");
         rd.forward(req, resp);

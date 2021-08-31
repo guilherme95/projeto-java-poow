@@ -10,6 +10,19 @@ public class Entrega {
     public Entrega() {
     }
 
+    public Entrega(int id_entrega, String endereco_entrega, Entregador entregador, Venda venda) {
+        this.id_entrega = id_entrega;
+        this.endereco_entrega = endereco_entrega;
+        this.entregador = entregador;
+        this.venda = venda;
+    }
+
+    public Entrega(String endereco_entrega, Entregador entregador, Venda venda) {
+        this.endereco_entrega = endereco_entrega;
+        this.entregador = entregador;
+        this.venda = venda;
+    }
+
     public int getId_entrega() {
         return id_entrega;
     }

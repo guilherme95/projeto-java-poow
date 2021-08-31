@@ -1,9 +1,6 @@
 package br.ufsm.csi.dao;
 
-import br.ufsm.csi.connection.ConectaDB;
-import br.ufsm.csi.model.Loja;
 import br.ufsm.csi.model.Usuario;
-
 import java.sql.*;
 
 public class LoginDAO {
@@ -15,8 +12,6 @@ public class LoginDAO {
     private String status;
 
     public String autorizar(Usuario usuario) {
-        System.out.println(usuario.getEmail_usuario());
-        System.out.println(usuario.getSenha_usuario());
         if(usuario.getEmail_usuario().equals("super@email.com") && usuario.getSenha_usuario().equals("123456789")){
             this.status = "SUCCESS";
         }else{

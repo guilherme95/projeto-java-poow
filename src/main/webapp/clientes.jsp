@@ -13,7 +13,9 @@
 <head>
     <title>Clientes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
-    <link href="resources/css/clientes.css" rel="stylesheet">
+    <style>
+        <%@include file="resources/css/clientes.css"%>
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -39,23 +41,30 @@
                     <li class="nav-item">
                         <a class="nav-link" href="http://localhost:8080/Projeto/produtos">Produtos</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://localhost:8080/Projeto/vendas">Vendas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://localhost:8080/Projeto/entregas">Entregas</a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
+
+    <c:choose>
+        <c:when test="${cliente.id_cliente != null}">
+            <h1>Editar cliente</h1>
+            <input type="hidden" name="idcliente" value="${cliente.id_cliente}">
+            <input type="hidden" name="idusuario" value="${cliente.usuario.id_usuario}">
+        </c:when>
+        <c:otherwise>
+            <h1>Adicionar cliente</h1>
+            <input type="hidden" name="idcliente" value="0">
+        </c:otherwise>
+    </c:choose>
     <form action="cliente-controller" method="post">
 
-        <c:choose>
-            <c:when test="${cliente.id_cliente != null}">
-                <h1>Editar cliente</h1>
-                <input type="hidden" name="idcliente" value="${cliente.id_cliente}">
-                <input type="hidden" name="idusuario" value="${cliente.usuario.id_usuario}">
-            </c:when>
-            <c:otherwise>
-                <h1>Adicionar cliente</h1>
-                <input type="hidden" name="idcliente" value="0">
-            </c:otherwise>
-        </c:choose>
         <div class="mb-3 col-md-3">
             <label class="form-label" for="nome">Nome</label>
             <input class="form-control" id="nome" name="nome" type="text" value="${cliente.usuario.nome_usuario}"/>

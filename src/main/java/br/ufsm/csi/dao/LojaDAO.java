@@ -1,10 +1,7 @@
 package br.ufsm.csi.dao;
 
 import br.ufsm.csi.connection.ConectaDB;
-import br.ufsm.csi.model.Entregador;
 import br.ufsm.csi.model.Loja;
-import br.ufsm.csi.model.Usuario;
-
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -44,6 +41,7 @@ public class LojaDAO {
 
     //retrieve store DONE
     public Loja getLoja(int id){
+
         Loja loja = new Loja();
 
         try(Connection connection = new ConectaDB().getConexao()){
@@ -51,7 +49,6 @@ public class LojaDAO {
             this.sql = "select * from loja where id_loja = ?";
             this.preparedStatement = connection.prepareStatement(this.sql);
             this.preparedStatement.setInt(1, id);
-
             this.resultSet = this.preparedStatement.executeQuery();
 
             while(this.resultSet.next()){
@@ -68,6 +65,7 @@ public class LojaDAO {
 
     //update store DONE
     public String atualizar(Loja loja){
+
         try(Connection connection = new ConectaDB().getConexao() ){
 
             connection.setAutoCommit(false);
@@ -92,10 +90,10 @@ public class LojaDAO {
 
     //create store DONE
     public String cadastrar(Loja loja){
+
         try(Connection connection = new ConectaDB().getConexao() ){
 
             connection.setAutoCommit(false);
-
 
             this.sql = "INSERT INTO loja(nome_loja) VALUES (?);";
             this.preparedStatement = connection.prepareStatement(this.sql, PreparedStatement.RETURN_GENERATED_KEYS);

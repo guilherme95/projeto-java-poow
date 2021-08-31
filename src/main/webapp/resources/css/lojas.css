@@ -9,26 +9,24 @@ h1 {
 
 form {
     width: 100%;
-    display: flex;
-    justify-content: center;
+    display: inline-block;
+    text-align: -webkit-center;
     align-items: center;
     flex-wrap: wrap;
 }
 
-form > div {
-    float: left;
-    margin-right: 10px;
-    width: 32%;
+#label-left {
+    text-align: left;
 }
 
 #divBtnSubmitClient {
-    float: left;
-    width: 76%;
+    ext-align: right;
+    width: 25%;
 }
 
 #btnSubmitClient {
     float: right;
-    width: 12%;
+    width: 24%;
 }
 
 section {

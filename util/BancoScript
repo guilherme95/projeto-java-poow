@@ -1,0 +1,72 @@
+create schema public_trabalho;
+
+alter schema public owner to postgres;
+
+CREATE TABLE loja(
+     id_loja serial not null,
+     nome_loja varchar(50) unique,
+     PRIMARY KEY(id_loja)
+);
+
+CREATE TABLE produto(
+    id_produto serial not null,
+    nome_produto varchar(50),
+    valor_produto varchar(50),
+    id_loja int,
+    PRIMARY KEY(id_produto),
+    FOREIGN KEY(id_loja) REFERENCES loja(id_loja)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE usuario(
+    id_usuario serial not null,
+    nome_usuario varchar(100),
+    rg_usuario varchar(50),
+    cpf_usuario varchar(50),
+    tel_usuario varchar(50),
+    email_usuario varchar(50),
+    senha_usuario varchar(50),
+    PRIMARY KEY(id_usuario)
+);
+
+CREATE TABLE cliente(
+    id_cliente serial not null,
+    id_usuario int,
+    PRIMARY KEY(id_cliente),
+    FOREIGN KEY(id_usuario) REFERENCES usuario(id_usuario)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE entregador(
+    id_entregador serial not null,
+    cnh_entregador varchar(50),
+    id_usuario int,
+    PRIMARY KEY(id_entregador),
+    FOREIGN KEY(id_usuario) REFERENCES usuario(id_usuario)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE venda(
+    id_venda serial not null,
+    data_venda date,
+    quantidade double precision,
+    forma_pagamento varchar(50),
+    id_produto int,
+    id_cliente int,
+    PRIMARY KEY(id_venda),
+    FOREIGN KEY(id_produto) REFERENCES produto(id_produto),
+    FOREIGN KEY(id_cliente) REFERENCES cliente(id_cliente)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE entrega(
+    id_entrega serial not null,
+    endereco_entrega varchar(100),
+    id_entregador int,
+    id_venda int,
+    PRIMARY KEY(id_entrega),
+    FOREIGN KEY(id_entregador) REFERENCES entregador(id_entregador),
+    FOREIGN KEY(id_venda) REFERENCES venda(id_venda)
+    ON DELETE CASCADE
+);
+

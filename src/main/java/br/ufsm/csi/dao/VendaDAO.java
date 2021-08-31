@@ -4,18 +4,18 @@ import br.ufsm.csi.connection.ConectaDB;
 import br.ufsm.csi.model.Cliente;
 import br.ufsm.csi.model.Produto;
 import br.ufsm.csi.model.Venda;
-
 import java.sql.*;
 import java.util.ArrayList;
 
 public class VendaDAO {
+
     private String sql;
     private Statement statement;
     private ResultSet resultSet;
     private PreparedStatement preparedStatement;
     private String status;
 
-    //get all
+    //get all sales DONE
     public ArrayList<Venda> getVendas(){
 
         ArrayList<Venda> vendas = new ArrayList<Venda>();
@@ -30,11 +30,14 @@ public class VendaDAO {
                 Venda venda = new Venda();
                 venda.setId_venda(this.resultSet.getInt("id_venda"));
                 venda.setData_venda(this.resultSet.getDate("data_venda"));
-                venda.setValor_venda(this.resultSet.getDouble("valor_venda"));
-                venda.setForma_pagamento(this.resultSet.getString("forma_pagamento"));
                 venda.setQuantidade(this.resultSet.getDouble("quantidade"));
-                venda.setCliente((Cliente) this.resultSet.getObject("id_cliente"));
-                venda.setProduto((Produto) this.resultSet.getObject("id_produto"));
+                venda.setForma_pagamento(this.resultSet.getString("forma_pagamento"));
+
+                Cliente cliente = new ClienteDAO().getCliente(this.resultSet.getInt("id_cliente"));
+                venda.setCliente(cliente);
+
+                Produto produto = new ProdutoDAO().getProduto(this.resultSet.getInt("id_produto"));
+                venda.setProduto(produto);
 
                 vendas.add(venda);
             }
@@ -46,60 +49,54 @@ public class VendaDAO {
         return vendas;
     }
 
-    //get one
-    public Venda getCliente(Venda venda){
-        try(Connection connection = new ConectaDB().getConexao() ){
+    //retrieve sale DONE
+    public Venda getVenda(int id){
 
-            this.sql = "SELECT * FROM venda WHERE id_vendae = ? OR data_venda = ?";
+        Venda venda = new Venda();
+
+        try(Connection connection = new ConectaDB().getConexao()){
+
+            this.sql = "SELECT * FROM venda WHERE id_venda = ?;";
             this.preparedStatement = connection.prepareStatement(this.sql);
-            this.preparedStatement.setInt(1, venda.getId_venda());
-            this.preparedStatement.setDate(2, (Date) venda.getData_venda());
-
-            this.preparedStatement.execute();
-            this.resultSet = this.preparedStatement.getResultSet();
-            this.resultSet.next();
+            this.preparedStatement.setInt(1, id);
+            this.resultSet = this.preparedStatement.executeQuery();
 
             while(this.resultSet.next()){
                 venda.setId_venda(this.resultSet.getInt("id_venda"));
                 venda.setData_venda(this.resultSet.getDate("data_venda"));
-                venda.setValor_venda(this.resultSet.getDouble("valor_venda"));
-                venda.setForma_pagamento(this.resultSet.getString("forma_pagamento"));
                 venda.setQuantidade(this.resultSet.getDouble("quantidade"));
-                venda.setCliente((Cliente) this.resultSet.getObject("id_cliente"));
-                venda.setProduto((Produto) this.resultSet.getObject("id_produto"));
+                venda.setForma_pagamento(this.resultSet.getString("forma_pagamento"));
+
+                Cliente cliente = new ClienteDAO().getCliente(this.resultSet.getInt("id_cliente"));
+                venda.setCliente(cliente);
+
+                Produto produto = new ProdutoDAO().getProduto(this.resultSet.getInt("id_produto"));
+                venda.setProduto(produto);
             }
 
-        }catch (SQLException e){
-            this.status = "Error";
+        }catch(SQLException e){
             e.printStackTrace();
         }
         return venda;
     }
 
-    //update
-    public String update(Venda venda){
+    //update sale DONE
+    public String atualizar(Venda venda){
+
         try(Connection connection = new ConectaDB().getConexao() ){
 
             connection.setAutoCommit(false);
 
-            this.sql = "UPDATE venda SET data_venda = ?, valor_venda = ?, quantidade = ?, forma_pagamento = ? WHERE id_cliente = ?";
-            this.preparedStatement = connection.prepareStatement(this.sql, PreparedStatement.RETURN_GENERATED_KEYS);
-            this.preparedStatement.setDate(1, (Date) venda.getData_venda());
-            this.preparedStatement.setDouble(2, venda.getValor_venda());
-            this.preparedStatement.setDouble(3, venda.getQuantidade());
-            this.preparedStatement.setString(4, venda.getForma_pagamento());
-            this.preparedStatement.setInt(5, venda.getId_venda());
+            this.sql = "UPDATE venda SET quantidade = ?, forma_pagamento = ?, id_produto = ?, id_cliente = ?  WHERE id_venda = ?;";
+            this.preparedStatement = connection.prepareStatement(this.sql);
+            this.preparedStatement.setDouble(1, venda.getQuantidade());
+            this.preparedStatement.setString(2, venda.getForma_pagamento());
+            this.preparedStatement.setInt(3, venda.getProduto().getId_produto());
+            this.preparedStatement.setInt(4, venda.getCliente().getId_cliente());
+            this.preparedStatement.executeUpdate();
 
-            this.preparedStatement.execute();
-            this.resultSet = this.preparedStatement.getGeneratedKeys();
-            this.resultSet.next();
-
-            if(this.resultSet.getInt(1) > 0){
-                venda.setId_venda(this.resultSet.getInt(1));
+            if(this.preparedStatement.getUpdateCount() > 0){
                 this.status = "OK";
-            }
-
-            if(this.status.equals("OK")){
                 connection.commit();
             }
 
@@ -107,34 +104,27 @@ public class VendaDAO {
             this.status = "Error";
             e.printStackTrace();
         }
-        return null;
+        return this.status;
     }
 
-    //create
-    public String create(Venda venda){
+    //create sale DONE
+    public String cadastrar(Venda venda){
         try(Connection connection = new ConectaDB().getConexao() ){
 
             connection.setAutoCommit(false);
 
-            this.sql = "INSERT INTO venda (data_venda, valor_venda, quantidade, forma_pagamento, id_produto, id_cliente) VALUES data_venda = ?, valor_venda = ?, quantidade = ?, forma_pagamento = ?, id_produto = ? , id_cliente = ?";
+            this.sql = "INSERT INTO venda(data_venda, quantidade, forma_pagamento, id_produto, id_cliente) VALUES (CURRENT_DATE , ?, ?, ?, ?);";
             this.preparedStatement = connection.prepareStatement(this.sql, PreparedStatement.RETURN_GENERATED_KEYS);
-            this.preparedStatement.setDate(1, (Date) venda.getData_venda());
-            this.preparedStatement.setDouble(2, venda.getValor_venda());
-            this.preparedStatement.setDouble(3, venda.getQuantidade());
-            this.preparedStatement.setString(4, venda.getForma_pagamento());
-            this.preparedStatement.setObject(5, venda.getProduto());
-            this.preparedStatement.setObject(6, venda.getCliente());
-
+            this.preparedStatement.setDouble(1, venda.getQuantidade());
+            this.preparedStatement.setString(2, venda.getForma_pagamento());
+            this.preparedStatement.setInt(3, venda.getProduto().getId_produto());
+            this.preparedStatement.setInt(4, venda.getCliente().getId_cliente());
             this.preparedStatement.execute();
             this.resultSet = this.preparedStatement.getGeneratedKeys();
             this.resultSet.next();
 
             if(this.resultSet.getInt(1) > 0){
-                venda.setId_venda(this.resultSet.getInt(1));
                 this.status = "OK";
-            }
-
-            if(this.status.equals("OK")){
                 connection.commit();
             }
 
@@ -142,29 +132,23 @@ public class VendaDAO {
             this.status = "Error";
             e.printStackTrace();
         }
-        return null;
+        return this.status;
     }
 
-    //delete
-    public String delete(Venda venda){
+    //delete sale DONE
+    public String deletar(Venda venda){
+
         try(Connection connection = new ConectaDB().getConexao() ){
 
             connection.setAutoCommit(false);
 
-            this.sql = "DELETE FROM venda WHERE id_venda = ?";
+            this.sql = "DELETE FROM venda WHERE id_venda = ?;";
             this.preparedStatement = connection.prepareStatement(this.sql, PreparedStatement.RETURN_GENERATED_KEYS);
             this.preparedStatement.setInt(1, venda.getId_venda());
+            this.preparedStatement.executeUpdate();
 
-            this.preparedStatement.execute();
-            this.resultSet = this.preparedStatement.getGeneratedKeys();
-            this.resultSet.next();
-
-            if(this.resultSet.getInt(1) > 0){
-                venda.setId_venda(this.resultSet.getInt(1));
-                this.status = "OK";
-            }
-
-            if(this.status.equals("OK")){
+            if(this.preparedStatement.getUpdateCount()>0){
+                this.status = "Excluído";
                 connection.commit();
             }
 
@@ -172,7 +156,7 @@ public class VendaDAO {
             this.status = "Error";
             e.printStackTrace();
         }
-        return null;
+        return this.status;
     }
 
 }

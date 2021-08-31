@@ -20,28 +20,22 @@ public class ClienteController extends HttpServlet {
 
         ClienteDAO clienteDAO = new ClienteDAO();
         String opcao = "";
+        String retorno = "";
 
         if(req.getParameter("opcao")!=null){
             opcao = req.getParameter("opcao");
         }
 
-        System.out.println("Em cima do controller");
-
-        String retorno = "";
-
         if(opcao.equals("excluir")){
             String id = req.getParameter("id");
-            System.out.println("ID do cliente a ser excluído: "+id);
-
             Cliente cliente = new ClienteDAO().getCliente(Integer.parseInt(id));
-            System.out.println("ID_CLIENTE: "+cliente.getId_cliente());
             retorno = clienteDAO.deletar(cliente);
-            System.out.println("excluído!!!");
 
         }else if(opcao.equals("editar")) {
             int id = Integer.parseInt(req.getParameter("id"));
             Cliente cliente = new ClienteDAO().getCliente(id);
             req.setAttribute("cliente", cliente);
+
         }else{
             String nome = req.getParameter("nome");
             String rg = req.getParameter("rg");
@@ -49,7 +43,6 @@ public class ClienteController extends HttpServlet {
             String telefone = req.getParameter("telefone");
             String email = req.getParameter("email");
             String senha = req.getParameter("senha");
-
             Usuario usuario = new Usuario(nome, rg, cpf, telefone, email, senha);
             int id = Integer.parseInt(req.getParameter("idcliente"));
 
@@ -62,7 +55,6 @@ public class ClienteController extends HttpServlet {
                 retorno = clienteDAO.cadastrar(cliente);
             }
         }
-
         req.setAttribute("retorno", retorno);
         RequestDispatcher rd = req.getRequestDispatcher("/clientes");
         rd.forward(req, resp);

@@ -1,4 +1,4 @@
-body {
+.container{
     text-align: center;
     margin: 0;
     position: absolute;
@@ -7,14 +7,19 @@ body {
     width: 100%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    background: red;
 }
 
 form {
     display: inline-block;
-    width: 15%;
+    width: 100%;
+    text-align: -webkit-center;
 }
 
 form > div {
     width: 100%;
+    text-align: left;
+}
+
+#divBtnSubmitClient {
+    width: 25%;
 }

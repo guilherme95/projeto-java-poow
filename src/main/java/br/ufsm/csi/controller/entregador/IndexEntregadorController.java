@@ -13,11 +13,11 @@ import java.io.IOException;
 
 @WebServlet("/entregadores")
 public class IndexEntregadorController extends HttpServlet {
+
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("entregadores", new EntregadorDAO().getEntregadores());
         RequestDispatcher rd = req.getRequestDispatcher("/entregadores.jsp");
         rd.forward(req, resp);
-        System.out.println("...index");
     }
 }

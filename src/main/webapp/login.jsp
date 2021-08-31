@@ -13,7 +13,9 @@
     <head>
         <title>Login</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
-        <link href="resources/css/login.css" rel="stylesheet">
+        <style>
+            <%@include file="resources/css/login.css"%>
+        </style>
     </head>
     <body>
 
@@ -40,11 +42,17 @@
                     <li class="nav-item">
                         <a class="nav-link" href="http://localhost:8080/Projeto/produtos">Produtos</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://localhost:8080/Projeto/vendas">Vendas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://localhost:8080/Projeto/entregas">Entregas</a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
-
+    <div class="container">
         <h1>Faça seu Login</h1>
         <form action="login-controller" method="post">
 
@@ -67,5 +75,6 @@
             <h2>Email ou senha incorretas</h2>
         </c:if >
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+    </div>
     </body>
 </html>

@@ -1,8 +1,6 @@
-package br.ufsm.csi.controller.produto;
+package br.ufsm.csi.controller.entrega;
 
-import br.ufsm.csi.dao.ClienteDAO;
-import br.ufsm.csi.dao.LojaDAO;
-import br.ufsm.csi.dao.ProdutoDAO;
+import br.ufsm.csi.dao.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,14 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/produtos")
-public class IndexProdutoController extends HttpServlet {
+@WebServlet("/entregas")
+public class IndexEntregaController extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("produtos", new ProdutoDAO().getProdutos());
-        req.setAttribute("lojas", new LojaDAO().getLojas());
-        RequestDispatcher rd = req.getRequestDispatcher("/produtos.jsp");
+        req.setAttribute("entregadores", new EntregadorDAO().getEntregadores());
+        req.setAttribute("vendas", new VendaDAO().getVendas());
+        req.setAttribute("entregas", new EntregaDAO().getEntregas());
+        RequestDispatcher rd = req.getRequestDispatcher("/entregas.jsp");
         rd.forward(req, resp);
     }
 }

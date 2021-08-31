@@ -6,13 +6,28 @@ public class Venda {
 
     private int id_venda;
     private Date data_venda;
-    private double valor_venda;
     private double quantidade;
     private String forma_pagamento;
     private Produto produto;
     private Cliente cliente;
 
     public Venda() {
+    }
+
+    public Venda(int id_venda, double quantidade, String forma_pagamento, Produto produto, Cliente cliente) {
+        this.id_venda = id_venda;
+        this.data_venda = data_venda;
+        this.quantidade = quantidade;
+        this.forma_pagamento = forma_pagamento;
+        this.produto = produto;
+        this.cliente = cliente;
+    }
+
+    public Venda(double quantidade, String forma_pagamento, Produto produto, Cliente cliente) {
+        this.quantidade = quantidade;
+        this.forma_pagamento = forma_pagamento;
+        this.produto = produto;
+        this.cliente = cliente;
     }
 
     public int getId_venda() {
@@ -29,14 +44,6 @@ public class Venda {
 
     public void setData_venda(Date data_venda) {
         this.data_venda = data_venda;
-    }
-
-    public double getValor_venda() {
-        return valor_venda;
-    }
-
-    public void setValor_venda(double valor_venda) {
-        this.valor_venda = valor_venda;
     }
 
     public double getQuantidade() {

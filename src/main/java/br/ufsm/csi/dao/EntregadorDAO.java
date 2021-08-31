@@ -3,7 +3,6 @@ package br.ufsm.csi.dao;
 import br.ufsm.csi.connection.ConectaDB;
 import br.ufsm.csi.model.Entregador;
 import br.ufsm.csi.model.Usuario;
-
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -57,8 +56,11 @@ public class EntregadorDAO {
 
     //retrieve deliverymen DONE
     public Entregador getEntregador(int id){
+
         Entregador entregador = null;
+
         try(Connection connection = new ConectaDB().getConexao()){
+
             this.sql = "SELECT * FROM entregador WHERE id_entregador = ?;";
             this.preparedStatement = connection.prepareStatement(this.sql);
             this.preparedStatement.setInt(1, id);
@@ -68,7 +70,6 @@ public class EntregadorDAO {
                 int id_usuario = this.resultSet.getInt("id_usuario");
                 String cnh_entregador = this.resultSet.getString("cnh_entregador");
                 entregador = new Entregador(id, cnh_entregador, new UsuarioDAO().getUsuario(id_usuario));
-                System.out.println(entregador.getId_entregador());
             }
 
         }catch(SQLException e){
@@ -79,6 +80,7 @@ public class EntregadorDAO {
 
     //update deliverymen DONE
     public String atualizar(Entregador entregador){
+
         try(Connection connection = new ConectaDB().getConexao() ){
 
             connection.setAutoCommit(false);
@@ -109,6 +111,7 @@ public class EntregadorDAO {
 
     //create deliverymen DONE
     public String cadastrar(Entregador entregador){
+
         try(Connection connection = new ConectaDB().getConexao() ){
 
             connection.setAutoCommit(false);
@@ -152,8 +155,8 @@ public class EntregadorDAO {
 
             if(this.preparedStatement.getUpdateCount()>0){
                 String retorno = new UsuarioDAO().deletar(entregador.getUsuario(), connection);
-                if(retorno.equals("OK")){
-                    this.status = "OK";
+                if(retorno.equals("Excluído")){
+                    this.status = "Excluído";
                     connection.commit();
                 }
             }

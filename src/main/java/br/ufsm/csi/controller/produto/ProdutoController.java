@@ -31,25 +31,20 @@ public class ProdutoController extends HttpServlet {
 
         if(opcao.equals("excluir")){
             int id = Integer.parseInt(req.getParameter("id"));
-            System.out.println("ID do produto a ser excluído: "+id);
-
             Produto produto = new ProdutoDAO().getProduto(id);
             retorno = produtoDAO.deletar(produto);
-            System.out.println("excluído!!!");
 
         }else if(opcao.equals("editar")) {
             int id = Integer.parseInt(req.getParameter("id"));
             Produto produto = new ProdutoDAO().getProduto(id);
             req.setAttribute("produto", produto);
+
         }else{
             String nome = req.getParameter("nome");
             String valor = req.getParameter("valor");
             int id_loja = Integer.parseInt(req.getParameter("loja"));
-
             int id_produto = Integer.parseInt(req.getParameter("idproduto"));
-
             Loja loja = new LojaDAO().getLoja(id_loja);
-
 
             if(id_produto>0){
                 Produto produto = new Produto(id_produto, nome, valor, loja);
@@ -59,9 +54,7 @@ public class ProdutoController extends HttpServlet {
                 retorno = produtoDAO.cadastrar(produto);
             }
         }
-
         req.setAttribute("retorno", retorno);
-
         RequestDispatcher rd = req.getRequestDispatcher("/produtos");
         rd.forward(req, resp);
     }
