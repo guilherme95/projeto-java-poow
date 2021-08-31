@@ -56,16 +56,24 @@
   <c:choose>
     <c:when test="${entregador.id_entregador != null}">
       <h1>Editar entregador</h1>
-      <input type="hidden" name="identregador" value="${entregador.id_entregador}">
-      <input type="hidden" name="idusuario" value="${entregador.usuario.id_usuario}">
     </c:when>
     <c:otherwise>
       <h1>Adicionar entregador</h1>
-      <input type="hidden" name="identregador" value="0">
     </c:otherwise>
   </c:choose>
 
 <form action="entregador-controller" method="post">
+
+  <c:choose>
+    <c:when test="${entregador.id_entregador != null}">
+      <input type="hidden" name="identregador" value="${entregador.id_entregador}">
+      <input type="hidden" name="idusuario" value="${entregador.usuario.id_usuario}">
+    </c:when>
+    <c:otherwise>
+      <input type="hidden" name="identregador" value="0">
+    </c:otherwise>
+  </c:choose>
+
   <div class="mb-3 col-md-3">
     <label class="form-label" for="nome">Nome</label>
     <input class="form-control" id="nome" name="nome" type="text" value="${entregador.usuario.nome_usuario}"/>

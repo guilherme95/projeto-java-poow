@@ -55,15 +55,22 @@
 <c:choose>
     <c:when test="${loja.id_loja != null}">
         <h1>Editar loja</h1>
-        <input type="hidden" name="idloja" value="${loja.id_loja}">
     </c:when>
     <c:otherwise>
         <h1>Adicionar loja</h1>
-        <input type="hidden" name="idloja" value="0">
     </c:otherwise>
 </c:choose>
 
 <form action="loja-controller" method="post">
+    <c:choose>
+        <c:when test="${loja.id_loja != null}">
+            <input type="hidden" name="idloja" value="${loja.id_loja}">
+        </c:when>
+        <c:otherwise>
+            <input type="hidden" name="idloja" value="0">
+        </c:otherwise>
+    </c:choose>
+
     <div class="mb-3 col-md-3" id="label-left">
         <label class="form-label" for="nome">Nome</label>
         <input class="form-control" id="nome" name="nome" type="text" value="${loja.nome_loja}"/>

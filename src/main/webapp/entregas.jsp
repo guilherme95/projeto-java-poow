@@ -55,15 +55,23 @@
 <c:choose>
   <c:when test="${venda.id_venda != null}">
     <h1>Editar entrega</h1>
-    <input type="hidden" name="identrega" value="${venda.id_venda}">
   </c:when>
   <c:otherwise>
     <h1>Adicionar entrega</h1>
-    <input type="hidden" name="identrega" value="0">
   </c:otherwise>
 </c:choose>
 
 <form action="entrega-controller" method="post">
+
+  <c:choose>
+    <c:when test="${venda.id_venda != null}">
+      <input type="hidden" name="identrega" value="${venda.id_venda}">
+    </c:when>
+    <c:otherwise>
+      <input type="hidden" name="identrega" value="0">
+    </c:otherwise>
+  </c:choose>
+
   <div class="mb-3 col-md-3">
     <label class="form-label" for="endereco">Endereço da entrega</label>
     <input class="form-control" id="endereco" name="endereco" type="text" value="${entrega.endereco_entrega}"/>

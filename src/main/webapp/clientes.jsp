@@ -55,15 +55,22 @@
     <c:choose>
         <c:when test="${cliente.id_cliente != null}">
             <h1>Editar cliente</h1>
-            <input type="hidden" name="idcliente" value="${cliente.id_cliente}">
-            <input type="hidden" name="idusuario" value="${cliente.usuario.id_usuario}">
         </c:when>
         <c:otherwise>
             <h1>Adicionar cliente</h1>
-            <input type="hidden" name="idcliente" value="0">
         </c:otherwise>
     </c:choose>
     <form action="cliente-controller" method="post">
+
+        <c:choose>
+            <c:when test="${cliente.id_cliente != null}">
+                <input type="hidden" name="idcliente" value="${cliente.id_cliente}">
+                <input type="hidden" name="idusuario" value="${cliente.usuario.id_usuario}">
+            </c:when>
+            <c:otherwise>
+                <input type="hidden" name="idcliente" value="0">
+            </c:otherwise>
+        </c:choose>
 
         <div class="mb-3 col-md-3">
             <label class="form-label" for="nome">Nome</label>

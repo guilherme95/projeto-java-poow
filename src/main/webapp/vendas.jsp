@@ -55,15 +55,22 @@
 <c:choose>
     <c:when test="${venda.id_venda != null}">
         <h1>Editar venda</h1>
-        <input type="hidden" name="idvenda" value="${venda.id_venda}">
     </c:when>
     <c:otherwise>
         <h1>Adicionar venda</h1>
-        <input type="hidden" name="idvenda" value="0">
     </c:otherwise>
 </c:choose>
 
 <form action="venda-controller" method="post">
+
+    <c:choose>
+        <c:when test="${venda.id_venda != null}">
+            <input type="hidden" name="idvenda" value="${venda.id_venda}">
+        </c:when>
+        <c:otherwise>
+            <input type="hidden" name="idvenda" value="0">
+        </c:otherwise>
+    </c:choose>
 
     <c:choose>
         <c:when test="${venda.id_venda != null}">
